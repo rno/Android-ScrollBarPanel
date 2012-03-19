@@ -1,47 +1,33 @@
 package com.dafruits.android.samples;
 
-import com.dafruits.android.library.widgets.ExtendedListView;
-import com.dafruits.android.samples.R;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
-public class DemoScrollBarPanelActivity extends Activity {
-	
+import com.dafruits.android.library.widgets.ExtendedListView;
+import com.dafruits.android.library.widgets.ExtendedListView.OnPositionChangedListener;
+
+public class DemoScrollBarPanelActivity extends Activity implements OnPositionChangedListener {
+
 	private ExtendedListView mListView;
 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.main);
-		
+
 		mListView = (ExtendedListView) findViewById(android.R.id.list);
 		mListView.setAdapter(new DummyAdapter());
 		mListView.setCacheColorHint(Color.TRANSPARENT);
-		mListView.setOnScrollListener(new OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				final TextView scrollBarPanel = (TextView) mListView.getScrollBarPanel();
-				scrollBarPanel.setText("Position " + firstVisibleItem);
-			}
-		});
+		mListView.setOnPositionChangedListener(this);
 	}
-	
-	
+
 	private class DummyAdapter extends BaseAdapter {
 
 		private int mNumDummies = 100;
@@ -64,13 +50,19 @@ public class DemoScrollBarPanelActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = LayoutInflater.from(DemoScrollBarPanelActivity.this).inflate(R.layout.list_item, parent, false);
+				convertView = LayoutInflater.from(DemoScrollBarPanelActivity.this).inflate(R.layout.list_item, parent,
+						false);
 			}
-			
+
 			TextView textView = (TextView) convertView;
 			textView.setText("" + position);
-			
+
 			return convertView;
 		}
+	}
+
+	@Override
+	public void onPositionChanged(ExtendedListView listView, int firstVisiblePosition, View scrollBarPanel) {
+		((TextView) scrollBarPanel).setText("Position " + firstVisiblePosition);
 	}
 }
