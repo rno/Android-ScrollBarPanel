@@ -34,6 +34,7 @@ listView.setScrollBarPanel(scrollBarPanel);
 
 // attach a scroll listener on the listview and play with your scrollBarPanel
 // when you need to update its content
+```
 
 ## Pull Requests
 
