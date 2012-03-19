@@ -29,7 +29,6 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 
 	private View mScrollBarPanel = null;
 	private int mScrollBarPanelPosition = 0;
-	private int mScrollBarPanelFadeDuration = 0;
 
 	private OnPositionChangedListener mPositionChangedListener;
 	private int mFirstVisibleItemPosition = -1;
@@ -74,10 +73,11 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 			setScrollBarPanel(scrollBarPanelLayoutId);
 		}
 
-		mScrollBarPanelFadeDuration = ViewConfiguration.getScrollBarFadeDuration() * 2;
+		final int scrollBarPanelFadeDuration = ViewConfiguration.getScrollBarFadeDuration();
 
 		mInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.in_animation);
 		mOutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.out_animation);
+		mOutAnimation.setDuration(scrollBarPanelFadeDuration);
 
 		mOutAnimation.setAnimationListener(new AnimationListener() {
 
@@ -150,6 +150,23 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 	public View getScrollBarPanel() {
 		return mScrollBarPanel;
 	}
+	
+	@Override
+	protected boolean awakenScrollBars(int startDelay, boolean invalidate) {
+		final boolean isAnimationPlayed = super.awakenScrollBars(startDelay, invalidate);
+		
+		if (isAnimationPlayed == true) {
+			if (mScrollBarPanel.getVisibility() == View.GONE) {
+				mScrollBarPanel.setVisibility(View.VISIBLE);
+				mScrollBarPanel.startAnimation(mInAnimation);
+			}
+			
+			mHandler.removeCallbacks(mScrollBarPanelFadeRunnable);
+			mHandler.postAtTime(mScrollBarPanelFadeRunnable, AnimationUtils.currentAnimationTimeMillis() + startDelay);
+		}
+
+		return isAnimationPlayed;
+	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -194,13 +211,6 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 			return;
 		}
 
-		mHandler.removeCallbacks(mScrollBarPanelFadeRunnable);
-
-		if (mScrollBarPanel.getVisibility() == View.GONE) {
-			mScrollBarPanel.setVisibility(View.VISIBLE);
-			mScrollBarPanel.startAnimation(mInAnimation);
-		}
-
 		/*
 		 * from android source code (ScrollBarDrawable.java)
 		 */
@@ -225,7 +235,5 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 		final int x = getMeasuredWidth() - mScrollBarPanel.getMeasuredWidth() - getVerticalScrollbarWidth();
 		mScrollBarPanel.layout(x, mScrollBarPanelPosition, x + mScrollBarPanel.getMeasuredWidth(),
 				mScrollBarPanelPosition + mScrollBarPanel.getMeasuredHeight());
-
-		mHandler.postDelayed(mScrollBarPanelFadeRunnable, mScrollBarPanelFadeDuration);
 	}
 }
