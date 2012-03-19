@@ -63,6 +63,10 @@ I will gladly accept pull requests for fixes and feature enhancements but please
 
 * Optimisations
 
+### 0.1.3
+
+* More precision regarding scrollBarPanel fade in and fade out (Thanks [Cyril Mottier](https://github.com/cyrilmottier) for the tip!)
+
 ## Acknowledgments
 
 * [Chris Banes](https://github.com/chrisbanes)
