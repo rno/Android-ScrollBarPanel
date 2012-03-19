@@ -108,14 +108,15 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		updateScrollerView();
 
-		// If the position has changed, fire the OnPostionChangedListener
-		if (mFirstVisibleItemPosition != firstVisibleItem) {
-			mFirstVisibleItemPosition = firstVisibleItem;
+		if (null != mPositionChangedListener) {
 
-			if (null != mPositionChangedListener) {
+			// If the position has changed, fire the OnPostionChangedListener
+			if (mFirstVisibleItemPosition != firstVisibleItem) {
+				mFirstVisibleItemPosition = firstVisibleItem;
+				
 				mPositionChangedListener.onPositionChanged(firstVisibleItem, mScrollBarPanel);
+				updateScrollerView();
 			}
 		}
 
