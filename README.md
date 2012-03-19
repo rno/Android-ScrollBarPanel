@@ -1,6 +1,6 @@
 # Path like ScrollBarPanel for Android
 
-![Screenshot](https://github.com/rno/Android-ScrollBarPanel/blob/master/demo_capture.png)
+![Screenshot](https://github.com/rno/Android-ScrollBarPanel/raw/master/demo_capture.png)
 
 This project aims to provide a reusable ScrollBarPanel for Android ala Path.
 
