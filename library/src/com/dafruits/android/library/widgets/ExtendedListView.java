@@ -3,6 +3,7 @@ package com.dafruits.android.library.widgets;
 import com.dafruits.android.library.R;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -63,20 +64,51 @@ public class ExtendedListView extends ListView {
 	
 	
 	public ExtendedListView(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
 	
     public ExtendedListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-		init();
+        this(context, attrs, android.R.attr.listViewStyle);
     }
 
     
     public ExtendedListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-		init();
+        
+    	super.setOnScrollListener(mScrollListener);
+        
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ExtendedListView);
+        final int scrollBarPanelLayoutId = a.getResourceId(R.styleable.ExtendedListView_scrollBarPanel, -1);
+        a.recycle();
+        
+        if (scrollBarPanelLayoutId != -1) {
+        	setScrollBarPanel(scrollBarPanelLayoutId);
+        }
+		
+    	mScrollBarPanelFadeDuration = ViewConfiguration.getScrollBarFadeDuration() * 2;
+    	
+    	mInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.in_animation);
+    	mOutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.out_animation);
+    	
+    	mOutAnimation.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if (mScrollBarPanel != null) {
+					mScrollBarPanel.setVisibility(View.GONE);
+				}
+			}
+		});
     }
 
     
@@ -178,33 +210,5 @@ public class ExtendedListView extends ListView {
     	mScrollBarPanel.layout(x, mScrollBarPanelPosition, x + mScrollBarPanel.getMeasuredWidth(), mScrollBarPanelPosition + mScrollBarPanel.getMeasuredHeight());
     	
     	mHandler.postDelayed(mScrollBarPanelFadeRunnable, mScrollBarPanelFadeDuration);
-    }
-    
-    
-    private void init() {
-    	super.setOnScrollListener(mScrollListener);
-    	mScrollBarPanelFadeDuration = ViewConfiguration.getScrollBarFadeDuration() * 2;
-    	
-    	mInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.in_animation);
-    	mOutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.out_animation);
-    	
-    	mOutAnimation.setAnimationListener(new AnimationListener() {
-			
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
-			
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-
-			}
-			
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				if (mScrollBarPanel != null) {
-					mScrollBarPanel.setVisibility(View.GONE);
-				}
-			}
-		});
     }
 }

@@ -17,8 +17,8 @@ import android.widget.BaseAdapter;
 public class DemoScrollBarPanelActivity extends Activity {
 	
 	private ExtendedListView mListView;
-	private TextView mScrollBarPanel;
 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,8 +26,6 @@ public class DemoScrollBarPanelActivity extends Activity {
 		setContentView(R.layout.main);
 		
 		mListView = (ExtendedListView) findViewById(android.R.id.list);
-		mScrollBarPanel = (TextView) LayoutInflater.from(this).inflate(R.layout.scrollbarpanel, mListView, false);
-		mListView.setScrollBarPanel(mScrollBarPanel);
 		mListView.setAdapter(new DummyAdapter());
 		mListView.setCacheColorHint(Color.TRANSPARENT);
 		mListView.setOnScrollListener(new OnScrollListener() {
@@ -37,7 +35,8 @@ public class DemoScrollBarPanelActivity extends Activity {
 			
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				mScrollBarPanel.setText("Position " + firstVisibleItem);
+				final TextView scrollBarPanel = (TextView) mListView.getScrollBarPanel();
+				scrollBarPanel.setText("Position " + firstVisibleItem);
 			}
 		});
 	}

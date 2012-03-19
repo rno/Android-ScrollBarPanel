@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="ExtendedListView">
+        <attr name="scrollBarPanel" format="reference" />
+    </declare-styleable>
+</resources>
