@@ -62,7 +62,7 @@ public class DemoScrollBarPanelActivity extends Activity implements OnPositionCh
 	}
 
 	@Override
-	public void onPositionChanged(int firstVisiblePosition, View scrollBarPanel) {
+	public void onPositionChanged(ExtendedListView listView, int firstVisiblePosition, View scrollBarPanel) {
 		((TextView) scrollBarPanel).setText("Position " + firstVisiblePosition);
 	}
 }
