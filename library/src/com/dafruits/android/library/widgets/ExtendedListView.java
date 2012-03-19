@@ -32,7 +32,7 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 	private int mScrollBarPanelFadeDuration = 0;
 
 	private OnPositionChangedListener mPositionChangedListener;
-	private int mFirstVisibleItemPosition = 0;
+	private int mFirstVisibleItemPosition = -1;
 
 	private Animation mInAnimation = null;
 	private Animation mOutAnimation = null;
@@ -112,10 +112,13 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 		if (null != mPositionChangedListener && null != mScrollBarPanel) {
 
 			// If the position has changed, fire the OnPostionChangedListener
-			if (mFirstVisibleItemPosition != firstVisibleItem) {
-				mFirstVisibleItemPosition = firstVisibleItem;
-				
-				mPositionChangedListener.onPositionChanged(this, firstVisibleItem, mScrollBarPanel);
+			if (totalItemCount > 0) {
+				if (mFirstVisibleItemPosition != firstVisibleItem) {
+					mFirstVisibleItemPosition = firstVisibleItem;
+
+					mPositionChangedListener.onPositionChanged(this, firstVisibleItem, mScrollBarPanel);
+				}
+
 				updateScrollerView();
 			}
 		}
