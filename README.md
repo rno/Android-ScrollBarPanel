@@ -20,9 +20,11 @@ Repository at <https://github.com/rno/Android-ScrollBarPanel>.
   and provides the ScrollBarPanel capability.
 -->
 <com.dafruits.android.library.widgets.ExtendedListView
+    xmlns:dafruits="http://schemas.android.com/apk/res/YOUR_APP_PACKAGE_NAME"
     android:id="@android:id/list"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent" />
+    android:layout_width="fill_parent"
+    dafruits:scrollBarPanel="@layout/YOUR_SCROLLBARPANEL_LAYOUT" />
 ```
 
 ### Activity
@@ -30,10 +32,22 @@ Repository at <https://github.com/rno/Android-ScrollBarPanel>.
 ``` java
 // Set your scrollBarPanel
 ExtendedListView listView = (ExtendedListView) findViewById(android.R.id.list);
-listView.setScrollBarPanel(scrollBarPanel);
 
 // Attach a scroll listener on the listview and play with your scrollBarPanel
 // when you need to update its content
+mListView.setOnScrollListener(new OnScrollListener() {
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+		final TextView scrollBarPanel = (TextView) mListView.getScrollBarPanel();
+		scrollBarPanel.setText("Position " + firstVisibleItem);
+	}
+});
+
 ```
 
 ## Pull Requests
@@ -45,6 +59,10 @@ I will gladly accept pull requests for fixes and feature enhancements but please
 ### 0.1.0
 
 * first commit :-)
+
+### 0.1.1
+
+* added scrollBarPanel attribute to ExtendedListView
 
 ## License
 
