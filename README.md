@@ -1,12 +1,12 @@
-# Path like ScrollBarPanel for Android
+# Path 2.0 like ScrollBarPanel for Android
 
 ![Screenshot](https://github.com/rno/Android-ScrollBarPanel/raw/master/demo_capture.png)
 
-This project aims to provide a reusable ScrollBarPanel for Android ala Path.
+Android-ScrollBarPanel allows to attach a View to a scroll indicator like it's done in Path 2.0.
 
 ## Features
 
- * Supports custom ScrollBarPanel.
+ * Supports custom View as ScrollBarPanel.
 
 Repository at <https://github.com/rno/Android-ScrollBarPanel>.
 
@@ -33,18 +33,13 @@ Repository at <https://github.com/rno/Android-ScrollBarPanel>.
 // Set your scrollBarPanel
 ExtendedListView listView = (ExtendedListView) findViewById(android.R.id.list);
 
-// Attach a scroll listener on the listview and play with your scrollBarPanel
+// Attach a position changed listener on the listview and play with your scrollBarPanel
 // when you need to update its content
-mListView.setOnScrollListener(new OnScrollListener() {
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-	}
+mListView.setOnPositionChangedListener(new OnPositionChangedListener() {
 
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		final TextView scrollBarPanel = (TextView) mListView.getScrollBarPanel();
-		scrollBarPanel.setText("Position " + firstVisibleItem);
+	public void onPositionChanged(ExtendedListView listView, int firstVisiblePosition, View scrollBarPanel) {
+		((TextView) scrollBarPanel).setText("Position " + firstVisiblePosition);
 	}
 });
 
