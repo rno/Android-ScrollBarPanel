@@ -28,11 +28,11 @@ Repository at <https://github.com/rno/Android-ScrollBarPanel>.
 ### Activity
 
 ``` java
-// Set a listener to be invoked when the list should be refreshed.
+// Set your scrollBarPanel
 ExtendedListView listView = (ExtendedListView) findViewById(android.R.id.list);
 listView.setScrollBarPanel(scrollBarPanel);
 
-// attach a scroll listener on the listview and play with your scrollBarPanel
+// Attach a scroll listener on the listview and play with your scrollBarPanel
 // when you need to update its content
 ```
 
