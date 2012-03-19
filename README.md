@@ -64,6 +64,14 @@ I will gladly accept pull requests for fixes and feature enhancements but please
 
 * added scrollBarPanel attribute to ExtendedListView
 
+### 0.1.2
+
+* Optimisations
+
+## Acknowledgments
+
+* [Chris Banes](https://github.com/chrisbanes)
+
 ## License
 
 Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
