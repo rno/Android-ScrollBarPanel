@@ -31,7 +31,7 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 	private int mScrollBarPanelPosition = 0;
 
 	private OnPositionChangedListener mPositionChangedListener;
-	private int mFirstVisibleItemPosition = -1;
+	private int mLastPosition = -1;
 
 	private Animation mInAnimation = null;
 	private Animation mOutAnimation = null;
@@ -108,18 +108,61 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
 		if (null != mPositionChangedListener && null != mScrollBarPanel) {
 
-			// If the position has changed, fire the OnPostionChangedListener
+			// Don't do anything if there is no itemviews
 			if (totalItemCount > 0) {
-				if (mFirstVisibleItemPosition != firstVisibleItem) {
-					mFirstVisibleItemPosition = firstVisibleItem;
-
-					mPositionChangedListener.onPositionChanged(this, firstVisibleItem, mScrollBarPanel);
+				/*
+				 * from android source code (ScrollBarDrawable.java)
+				 */
+				final int thickness = getVerticalScrollbarWidth();
+				int height = Math.round((float) getMeasuredHeight() * computeVerticalScrollExtent() / computeVerticalScrollRange());
+				int thumbOffset = Math.round((float) (getMeasuredHeight() - height) * computeVerticalScrollOffset() / (computeVerticalScrollRange() - computeVerticalScrollExtent()));
+				final int minLength = thickness * 2;
+				if (height < minLength) {
+					height = minLength;
+				}
+				thumbOffset += height / 2;
+				
+				/*
+				 * find out which itemviews the center of thumb is on
+				 */
+				final int count = getChildCount();
+				for (int i = 0; i < count; ++i) {
+					final View childView = getChildAt(i);
+					if (childView != null) {
+						if (thumbOffset > childView.getTop() && thumbOffset < childView.getBottom()) {
+							/* 
+							 * we have our candidate
+							 */
+							if (mLastPosition != firstVisibleItem + i) {
+								mLastPosition = firstVisibleItem + i;
+								
+								/*
+								 * inform the position of the panel has changed
+								 */
+								mPositionChangedListener.onPositionChanged(this, mLastPosition, mScrollBarPanel);
+								
+								/*
+								 * measure panel right now since it has just changed
+								 * 
+								 * INFO: quick hack to handle TextView has ScrollBarPanel (to wrap text in
+								 * case TextView's content has changed)
+								 */
+								measureChild(mScrollBarPanel, mWidthMeasureSpec, mHeightMeasureSpec);
+							}
+							break;
+						}
+					}
 				}
 
-				updateScrollerView();
+				/*
+				 * update panel position
+				 */
+				mScrollBarPanelPosition = thumbOffset - mScrollBarPanel.getMeasuredHeight() / 2;
+				final int x = getMeasuredWidth() - mScrollBarPanel.getMeasuredWidth() - getVerticalScrollbarWidth();
+				mScrollBarPanel.layout(x, mScrollBarPanelPosition, x + mScrollBarPanel.getMeasuredWidth(),
+						mScrollBarPanelPosition + mScrollBarPanel.getMeasuredHeight());
 			}
 		}
 
@@ -204,36 +247,5 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 		super.onDetachedFromWindow();
 
 		mHandler.removeCallbacks(mScrollBarPanelFadeRunnable);
-	}
-
-	private void updateScrollerView() {
-		if (mScrollBarPanel == null) {
-			return;
-		}
-
-		/*
-		 * from android source code (ScrollBarDrawable.java)
-		 */
-		final int thickness = getVerticalScrollbarWidth();
-		int height = Math.round((float) getMeasuredHeight() * computeVerticalScrollExtent()
-				/ computeVerticalScrollRange());
-		final int offset = Math.round((float) (getMeasuredHeight() - height) * computeVerticalScrollOffset()
-				/ (computeVerticalScrollRange() - computeVerticalScrollExtent()));
-		final int minLength = thickness * 2;
-		if (height < minLength) {
-			height = minLength;
-		}
-
-		/*
-		 * quick hack to handle TextView has ScrollBarPanel (to wrap text in
-		 * case TextView's content has changed)
-		 */
-		measureChild(mScrollBarPanel, mWidthMeasureSpec, mHeightMeasureSpec);
-
-		mScrollBarPanelPosition = offset + height / 2 - mScrollBarPanel.getMeasuredHeight() / 2;
-
-		final int x = getMeasuredWidth() - mScrollBarPanel.getMeasuredWidth() - getVerticalScrollbarWidth();
-		mScrollBarPanel.layout(x, mScrollBarPanelPosition, x + mScrollBarPanel.getMeasuredWidth(),
-				mScrollBarPanelPosition + mScrollBarPanel.getMeasuredHeight());
 	}
 }
