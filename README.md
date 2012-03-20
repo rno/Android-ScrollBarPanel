@@ -67,6 +67,10 @@ I will gladly accept pull requests for fixes and feature enhancements but please
 
 * More precision regarding scrollBarPanel fade in and fade out (Thanks [Cyril Mottier](https://github.com/cyrilmottier) for the tip!)
 
+### 0.1.4
+
+* Use the position the scrollbar thumb is on instead of the firstVisibleItem position.
+
 ## Acknowledgments
 
 * [Chris Banes](https://github.com/chrisbanes)
