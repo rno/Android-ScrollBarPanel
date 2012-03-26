@@ -42,7 +42,9 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 
 		@Override
 		public void run() {
-			mScrollBarPanel.startAnimation(mOutAnimation);
+			if (mOutAnimation != null) {
+				mScrollBarPanel.startAnimation(mOutAnimation);
+			}
 		}
 	};
 
@@ -67,6 +69,8 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ExtendedListView);
 		final int scrollBarPanelLayoutId = a.getResourceId(R.styleable.ExtendedListView_scrollBarPanel, -1);
+		final int scrollBarPanelInAnimation = a.getResourceId(R.styleable.ExtendedListView_scrollBarPanelInAnimation, R.anim.in_animation);
+		final int scrollBarPanelOutAnimation = a.getResourceId(R.styleable.ExtendedListView_scrollBarPanelOutAnimation, R.anim.out_animation);
 		a.recycle();
 
 		if (scrollBarPanelLayoutId != -1) {
@@ -75,28 +79,33 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 
 		final int scrollBarPanelFadeDuration = ViewConfiguration.getScrollBarFadeDuration();
 
-		mInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.in_animation);
-		mOutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.out_animation);
-		mOutAnimation.setDuration(scrollBarPanelFadeDuration);
+		if (scrollBarPanelInAnimation > 0) {
+			mInAnimation = AnimationUtils.loadAnimation(getContext(), scrollBarPanelInAnimation);
+		}
+		
+		if (scrollBarPanelOutAnimation > 0) {
+			mOutAnimation = AnimationUtils.loadAnimation(getContext(), scrollBarPanelOutAnimation);
+			mOutAnimation.setDuration(scrollBarPanelFadeDuration);
 
-		mOutAnimation.setAnimationListener(new AnimationListener() {
+			mOutAnimation.setAnimationListener(new AnimationListener() {
 
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-
-			}
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				if (mScrollBarPanel != null) {
-					mScrollBarPanel.setVisibility(View.GONE);
+				@Override
+				public void onAnimationStart(Animation animation) {
 				}
-			}
-		});
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					if (mScrollBarPanel != null) {
+						mScrollBarPanel.setVisibility(View.GONE);
+					}
+				}
+			});
+		}
 	}
 
 	@Override
@@ -201,7 +210,9 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 		if (isAnimationPlayed == true && mScrollBarPanel != null) {
 			if (mScrollBarPanel.getVisibility() == View.GONE) {
 				mScrollBarPanel.setVisibility(View.VISIBLE);
-				mScrollBarPanel.startAnimation(mInAnimation);
+				if (mInAnimation != null) {
+					mScrollBarPanel.startAnimation(mInAnimation);
+				}
 			}
 			
 			mHandler.removeCallbacks(mScrollBarPanelFadeRunnable);

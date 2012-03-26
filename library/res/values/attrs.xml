@@ -1,5 +1,7 @@
 <resources>
     <declare-styleable name="ExtendedListView">
         <attr name="scrollBarPanel" format="reference" />
+        <attr name="scrollBarPanelInAnimation" format="reference" />
+        <attr name="scrollBarPanelOutAnimation" format="reference" />
     </declare-styleable>
 </resources>
