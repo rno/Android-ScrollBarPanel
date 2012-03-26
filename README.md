@@ -24,7 +24,9 @@ Repository at <https://github.com/rno/Android-ScrollBarPanel>.
     android:id="@android:id/list"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    dafruits:scrollBarPanel="@layout/YOUR_SCROLLBARPANEL_LAYOUT" />
+    dafruits:scrollBarPanel="@layout/YOUR_SCROLLBARPANEL_LAYOUT"
+    dafruits:scrollBarPanelInAnimation="@anim/YOUR_ANIMATION"
+    dafruits:scrollBarPanelOutAnimation="@anim/YOUR_ANIMATION" />
 ```
 
 ### Activity
@@ -70,6 +72,11 @@ I will gladly accept pull requests for fixes and feature enhancements but please
 ### 0.1.4
 
 * Use the position the scrollbar thumb is on instead of the firstVisibleItem position.
+
+### 0.1.5
+
+* Fix NPE (Thanks to [Chris Banes](https://github.com/chrisbanes))
+* Added attributes to ExtendedListView to customize in / out animation of scrollBarPanel
 
 ## Acknowledgments
 
