@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
+	<alpha
+		android:fromAlpha="0.2"
+		android:toAlpha="1.0"
+		android:fillAfter="true"
+		android:duration="@android:integer/config_shortAnimTime" />
+ 	<translate
+	    android:fromXDelta="50%"
+	    android:toXDelta="0%"
+	    android:duration="@android:integer/config_mediumAnimTime" />
+</set>
