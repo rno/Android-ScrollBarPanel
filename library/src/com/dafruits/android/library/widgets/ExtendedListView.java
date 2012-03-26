@@ -198,7 +198,7 @@ public class ExtendedListView extends ListView implements OnScrollListener {
 	protected boolean awakenScrollBars(int startDelay, boolean invalidate) {
 		final boolean isAnimationPlayed = super.awakenScrollBars(startDelay, invalidate);
 		
-		if (isAnimationPlayed == true) {
+		if (isAnimationPlayed == true && null != mScrollBarPanel) {
 			if (mScrollBarPanel.getVisibility() == View.GONE) {
 				mScrollBarPanel.setVisibility(View.VISIBLE);
 				mScrollBarPanel.startAnimation(mInAnimation);
